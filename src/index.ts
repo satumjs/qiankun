@@ -30,17 +30,18 @@ function registerMicroApps(apps: RegistrableApp[], lifeCycles?: LifeCycles) {
 
 function start(opts?: Options) {
   const { sandbox = true, singular, excludeAssetFilter, ...restOptions } = opts || {};
-  const qiankunTag = '__POWERED_BY_QIANKUN__';
+  const qiankunFlag = '__POWERED_BY_QIANKUN__';
+  const qiankunPublicFlag = '__INJECTED_PUBLIC_PATH_BY_QIANKUN__';
   if (sandbox) {
     use(simpleSandboxMidware, {
       winVariable(k: string, fakeWin: any) {
-        if (k === qiankunTag) return true;
-        if (k === '__INJECTED_PUBLIC_PATH_BY_QIANKUN__') return fakeWin.assetPublicPath;
+        if (k === qiankunFlag) return true;
+        if (k === qiankunPublicFlag) return fakeWin.assetPublicPath;
         return;
       },
     });
   } else {
-    window[qiankunTag] = true;
+    window[qiankunFlag] = true;
   }
   coreStart(restOptions as any);
 }
